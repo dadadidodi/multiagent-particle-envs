@@ -7,9 +7,9 @@ class Scenario(BaseScenario):
         world = World()
         # set any world properties first
         world.dim_c = 2
-        num_agents = 2
-        num_adversaries = 1
-        num_landmarks = 2
+        num_agents = 3
+        num_adversaries = 2
+        num_landmarks = 1
         # add agents
         world.agents = [Agent() for i in range(num_agents)]
         for i, agent in enumerate(world.agents):
@@ -69,10 +69,11 @@ class Scenario(BaseScenario):
         pos_rew = min(agent_dist)
         #nearest_agent = world.good_agents[np.argmin(agent_dist)]
         #neg_rew = np.sqrt(np.sum(np.square(nearest_agent.state.p_pos - agent.state.p_pos)))
-        neg_rew = np.sqrt(np.sum(np.square(agent.goal_a.state.p_pos - agent.state.p_pos)))
+        # neg_rew = np.sqrt(np.sum(np.square(agent.goal_a.state.p_pos - agent.state.p_pos)))
+        neg_rew = min([np.sqrt(np.sum(np.square(a.goal_a.state.p_pos - a.state.p_pos))) for a in world.agents if a.adversary])
         #neg_rew = sum([np.sqrt(np.sum(np.square(a.state.p_pos - agent.state.p_pos))) for a in world.good_agents])
         return pos_rew - neg_rew
-               
+
     def observation(self, agent, world):
         # get positions of all entities in this agent's reference frame
         entity_pos = []
